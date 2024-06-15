@@ -21,6 +21,6 @@ public class GetFilteredPersonsUseCase {
     public Page<PersonEntity> execute(Optional<String> name, Optional<String> cpf, Optional<LocalDate> birthDate, int page, int perPage) {
         Pageable pageable = PageRequest.of(page, perPage);
 
-        return personRepository.findByFilters(name, cpf, birthDate, pageable);
+        return this.personRepository.findByFilters(name, cpf, birthDate, pageable);
     }
 }
