@@ -1,8 +1,12 @@
 package viniciuseidy.cadastro_de_pessoas.modules.person.controllers;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
@@ -19,6 +24,7 @@ import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDT
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.CreatePersonUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.DeletePersonUseCase;
+import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetFilteredPersonsUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetPersonByCPFUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetPersonByIdUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.UpdatePersonUseCase;
@@ -33,6 +39,9 @@ public class PersonController {
 
     @Autowired
     private GetPersonByCPFUseCase getPersonByCPFUseCase;
+
+    @Autowired
+    private GetFilteredPersonsUseCase getFilteredPersonsUseCase;
 
     @Autowired
     private CreatePersonUseCase createPersonUseCase;
@@ -63,6 +72,25 @@ public class PersonController {
         } catch (PersonNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getPersons(
+        @RequestParam Optional<String> name,
+        @RequestParam Optional<String> cpf,
+        @RequestParam Optional<String> birthDateStr,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "10") int perPage
+    ) {
+        Optional<LocalDate> birthDate = birthDateStr.map(dateStr -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            return LocalDate.parse(dateStr, formatter);
+        });
+
+        Page<PersonEntity> personsPage = this.getFilteredPersonsUseCase.execute(name, cpf, birthDate, page, perPage);
+        
+        return ResponseEntity.ok().body(personsPage);
     }
     
     @PostMapping
