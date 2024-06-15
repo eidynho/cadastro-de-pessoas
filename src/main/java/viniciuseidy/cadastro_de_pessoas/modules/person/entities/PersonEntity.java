@@ -3,8 +3,8 @@ package viniciuseidy.cadastro_de_pessoas.modules.person.entities;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import viniciuseidy.cadastro_de_pessoas.modules.person.dto.PersonRequestDTO;
-
+import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
+import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,10 +16,12 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "person")
 @Table(name = "person")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
@@ -38,7 +40,14 @@ public class PersonEntity {
     @Column(nullable = false)
     private LocalDate birthDate;
 
-    public PersonEntity(PersonRequestDTO data) {
+    public PersonEntity(CreatePersonRequestDTO data) {
+        this.name = data.name();
+        this.cpf = data.cpf();
+        this.birthDate = data.birthDate();
+    }
+
+     public PersonEntity(UpdatePersonRequestDTO data) {
+        this.id = data.id();
         this.name = data.name();
         this.cpf = data.cpf();
         this.birthDate = data.birthDate();
