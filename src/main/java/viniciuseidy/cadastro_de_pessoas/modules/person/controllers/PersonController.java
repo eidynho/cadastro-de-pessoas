@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,12 +19,16 @@ import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDT
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.CreatePersonUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.DeletePersonUseCase;
+import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetPersonByIdUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.UpdatePersonUseCase;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+
+    @Autowired
+    private GetPersonByIdUseCase getPersonByIdUseCase;
 
     @Autowired
     private CreatePersonUseCase createPersonUseCase;
@@ -33,6 +38,17 @@ public class PersonController {
 
     @Autowired
     private DeletePersonUseCase deletePersonUseCase;
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<Object> getById(@PathVariable UUID id) {
+        try {
+            PersonEntity personEntity = this.getPersonByIdUseCase.execute(id);
+
+            return ResponseEntity.ok().body(personEntity);
+        } catch (PersonNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
     
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CreatePersonRequestDTO data) {
