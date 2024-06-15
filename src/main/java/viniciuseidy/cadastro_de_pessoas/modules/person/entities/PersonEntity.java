@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class PersonEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 11, max = 11, message = "CPF must be exactly 11 digits")
     private String cpf;
 
     @Past(message = "Birth date must be in the past")
