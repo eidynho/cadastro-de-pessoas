@@ -29,10 +29,7 @@ public class PersonRepositoryTest {
     @DisplayName("Should get Person successfully from database")
     void findByCpfSuccess() {
         String cpf = "12345678900";
-        String birthDateStr = "2001-09-02";
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate birthDate = LocalDate.parse(birthDateStr, formatter);
+        LocalDate birthDate = this.transformBirthDateStrToLocalDate("2001-09-02");
 
         CreatePersonRequestDTO data = new CreatePersonRequestDTO("Vinicius", cpf, birthDate);
 
@@ -59,5 +56,10 @@ public class PersonRepositoryTest {
         this.entityManager.persist(newPerson);
 
         return newPerson;
+    }
+
+    private LocalDate transformBirthDateStrToLocalDate(String birthDateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(birthDateStr, formatter);
     }
 }
