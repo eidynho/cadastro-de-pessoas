@@ -19,6 +19,7 @@ import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDT
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.CreatePersonUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.DeletePersonUseCase;
+import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetPersonByCPFUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.GetPersonByIdUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.UpdatePersonUseCase;
 import jakarta.validation.Valid;
@@ -29,6 +30,9 @@ public class PersonController {
 
     @Autowired
     private GetPersonByIdUseCase getPersonByIdUseCase;
+
+    @Autowired
+    private GetPersonByCPFUseCase getPersonByCPFUseCase;
 
     @Autowired
     private CreatePersonUseCase createPersonUseCase;
@@ -43,6 +47,17 @@ public class PersonController {
     public ResponseEntity<Object> getById(@PathVariable UUID id) {
         try {
             PersonEntity personEntity = this.getPersonByIdUseCase.execute(id);
+
+            return ResponseEntity.ok().body(personEntity);
+        } catch (PersonNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/cpf/{cpf}")
+    public ResponseEntity<Object> getByCPF(@PathVariable String cpf) {
+        try {
+            PersonEntity personEntity = this.getPersonByCPFUseCase.execute(cpf);
 
             return ResponseEntity.ok().body(personEntity);
         } catch (PersonNotFoundException e) {
