@@ -18,10 +18,6 @@ public class UpdatePersonUseCase {
             .findById(personEntity.getId())
             .orElseThrow(() -> new PersonNotFoundException());
 
-        if (personEntity.getName() != null) {
-            existingPersonEntity.setName(personEntity.getName());
-        }
-
         boolean isSameCPF = personEntity.getCpf().equals(existingPersonEntity.getCpf());
 
         if (personEntity.getCpf() != null && !isSameCPF) {
@@ -34,12 +30,6 @@ public class UpdatePersonUseCase {
                 .ifPresent((person) -> {
                     throw new CPFAlreadyExistsException();
                 });
-            
-            existingPersonEntity.setCpf(personEntity.getCpf());
-        }
-
-        if (personEntity.getBirthDate() != null) {
-            existingPersonEntity.setBirthDate(personEntity.getBirthDate());
         }
         
         return this.personRepository.save(personEntity);
