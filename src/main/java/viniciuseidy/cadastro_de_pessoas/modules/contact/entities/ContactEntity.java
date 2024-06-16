@@ -1,4 +1,4 @@
-package viniciuseidy.cadastro_de_pessoas.modules.person.entities;
+package viniciuseidy.cadastro_de_pessoas.modules.contact.entities;
 
 import java.util.UUID;
 
@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 
 @Entity(name = "contact")
 @Table(name = "contact")

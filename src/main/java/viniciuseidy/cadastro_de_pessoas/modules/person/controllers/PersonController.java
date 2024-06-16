@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDTO;
-import viniciuseidy.cadastro_de_pessoas.modules.person.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.CreatePersonUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.DeletePersonUseCase;

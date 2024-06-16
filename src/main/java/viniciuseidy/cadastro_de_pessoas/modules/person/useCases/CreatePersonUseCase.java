@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonFoundException;
-import viniciuseidy.cadastro_de_pessoas.modules.person.entities.ContactEntity;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.repositories.ContactRepository;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
-import viniciuseidy.cadastro_de_pessoas.modules.person.repositories.ContactRepository;
 import viniciuseidy.cadastro_de_pessoas.modules.person.repositories.PersonRepository;
 
 @Service
