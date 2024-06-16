@@ -16,11 +16,13 @@ public class UpdateContactUseCase {
     private ContactRepository contactRepository;
 
     public ContactEntity execute(ContactEntity contact) {
-        this.contactRepository
+        ContactEntity existentContact = this.contactRepository
             .findById(contact.getId())
             .orElseThrow(() -> {
                 throw new ContactNotFoundException();
             });
+
+        contact.setPerson(existentContact.getPerson());
 
         if (contact.getEmail() != null) {
             var isContactEmailValid = EmailValidator.getInstance().isValid(contact.getEmail());
