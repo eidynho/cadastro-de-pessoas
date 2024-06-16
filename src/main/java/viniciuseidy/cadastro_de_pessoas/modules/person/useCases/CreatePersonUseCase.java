@@ -14,8 +14,8 @@ public class CreatePersonUseCase {
     private PersonRepository personRepository;
 
     public PersonEntity execute(PersonEntity personEntity) {
-        if (personEntity.getCpf() == null || personEntity.getCpf().length() != 11) {
-            throw new IllegalArgumentException("CPF must be exactly 11 digits");
+        if (!personEntity.getCpf().matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
         }
         
         this.personRepository

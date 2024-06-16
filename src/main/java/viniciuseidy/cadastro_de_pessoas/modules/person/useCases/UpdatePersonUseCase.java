@@ -10,11 +10,10 @@ import viniciuseidy.cadastro_de_pessoas.modules.person.repositories.PersonReposi
 
 @Service
 public class UpdatePersonUseCase {
-
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity execute(PersonEntity personEntity) {
+    public PersonEntity execute(PersonEntity personEntity) {  
         PersonEntity existingPersonEntity = this.personRepository
             .findById(personEntity.getId())
             .orElseThrow(() -> new PersonNotFoundException());
@@ -26,6 +25,10 @@ public class UpdatePersonUseCase {
         boolean isSameCPF = personEntity.getCpf().equals(existingPersonEntity.getCpf());
 
         if (personEntity.getCpf() != null && !isSameCPF) {
+            if (!personEntity.getCpf().matches("\\d{11}")) {
+                throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
+            }
+
             this.personRepository
                 .findByCpf(personEntity.getCpf())
                 .ifPresent((person) -> {

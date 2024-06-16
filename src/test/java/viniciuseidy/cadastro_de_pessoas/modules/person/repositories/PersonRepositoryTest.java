@@ -23,10 +23,10 @@ import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 public class PersonRepositoryTest {
 
     @Autowired
-    PersonRepository personRepository;
+    private PersonRepository personRepository;
 
     @Autowired
-    EntityManager entityManager;
+    private EntityManager entityManager;
     
     @Test
     @DisplayName("Should get Person successfully from database")
