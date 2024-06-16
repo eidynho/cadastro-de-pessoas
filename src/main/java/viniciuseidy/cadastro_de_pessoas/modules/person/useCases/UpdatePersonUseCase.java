@@ -13,25 +13,35 @@ public class UpdatePersonUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity execute(PersonEntity personEntity) {  
+    public PersonEntity execute(PersonEntity updatedPerson) {  
         PersonEntity existingPersonEntity = this.personRepository
-            .findById(personEntity.getId())
+            .findById(updatedPerson.getId())
             .orElseThrow(() -> new PersonNotFoundException());
 
-        boolean isSameCPF = personEntity.getCpf().equals(existingPersonEntity.getCpf());
+        if (updatedPerson.getName() != null) {
+            existingPersonEntity.setName(updatedPerson.getName());
+        }
 
-        if (personEntity.getCpf() != null && !isSameCPF) {
-            if (!personEntity.getCpf().matches("\\d{11}")) {
+        boolean isSameCPF = updatedPerson.getCpf().equals(existingPersonEntity.getCpf());
+
+        if (updatedPerson.getCpf() != null && !isSameCPF) {
+            if (!updatedPerson.getCpf().matches("\\d{11}")) {
                 throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
             }
 
             this.personRepository
-                .findByCpf(personEntity.getCpf())
+                .findByCpf(updatedPerson.getCpf())
                 .ifPresent((person) -> {
                     throw new CPFAlreadyExistsException();
                 });
+
+            existingPersonEntity.setCpf(updatedPerson.getCpf());
         }
-        
-        return this.personRepository.save(personEntity);
+
+        if (updatedPerson.getBirthDate() != null) {
+            existingPersonEntity.setBirthDate(updatedPerson.getBirthDate());
+        }
+
+        return this.personRepository.save(existingPersonEntity);
     }
 }

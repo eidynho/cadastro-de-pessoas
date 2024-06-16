@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDTO;
@@ -49,6 +51,7 @@ public class PersonEntity {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
     @Size(min = 1, message = "Person must have at least one contact")
+    @JsonManagedReference
     private List<ContactEntity> contacts;
 
     public PersonEntity(CreatePersonRequestDTO data) {
