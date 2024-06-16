@@ -34,7 +34,7 @@ public class PersonRepositoryTest {
         String cpf = "12345678900";
         LocalDate birthDate = this.transformBirthDateStrToLocalDate("2001-09-02");
 
-        CreatePersonRequestDTO data = new CreatePersonRequestDTO("Vinicius", cpf, birthDate);
+        CreatePersonRequestDTO data = new CreatePersonRequestDTO("Vinicius", cpf, birthDate, "Some contact name", "44 99874-4288", "email@email.com");
 
         this.createPerson(data);
 
@@ -60,7 +60,7 @@ public class PersonRepositoryTest {
         String cpf = "12345678900";
         LocalDate birthDate = this.transformBirthDateStrToLocalDate("2001-09-02");
 
-        CreatePersonRequestDTO data = new CreatePersonRequestDTO(name, cpf, birthDate);
+        CreatePersonRequestDTO data = new CreatePersonRequestDTO(name, cpf, birthDate, "Some contact name", "44 99874-4288", "email@email.com");
 
         this.createPerson(data);
 
@@ -90,7 +90,7 @@ public class PersonRepositoryTest {
         String cpf = "12345678900";
         LocalDate birthDate = this.transformBirthDateStrToLocalDate("2001-09-02");
 
-        CreatePersonRequestDTO data = new CreatePersonRequestDTO(name, cpf, birthDate);
+        CreatePersonRequestDTO data = new CreatePersonRequestDTO(name, cpf, birthDate, "Some contact name", "44 99874-4288", "email@email.com");
 
         this.createPerson(data);
 
@@ -114,15 +114,15 @@ public class PersonRepositoryTest {
     void findByFiltersCase3() {
         LocalDate birthDate = this.transformBirthDateStrToLocalDate("2001-09-02");
 
-        CreatePersonRequestDTO firstPerson = new CreatePersonRequestDTO("Vinicius", "12345678900", birthDate);
+        CreatePersonRequestDTO firstPerson = new CreatePersonRequestDTO("Vinicius", "12345678900", birthDate, "First person contact", "44 99874-4288", "email@email.com");
         this.createPerson(firstPerson);
 
-        CreatePersonRequestDTO secondPerson = new CreatePersonRequestDTO("Eidy", "12345678901", birthDate);
+        CreatePersonRequestDTO secondPerson = new CreatePersonRequestDTO("Eidy", "12345678901", birthDate, "Second person contact", "44 99874-4288", "email@email.com");
         this.createPerson(secondPerson);
 
         String thirdPersonName = "Okuda";
         String thirdPersonCPF = "12345678902";
-        CreatePersonRequestDTO thirdPerson = new CreatePersonRequestDTO(thirdPersonName, thirdPersonCPF, birthDate);
+        CreatePersonRequestDTO thirdPerson = new CreatePersonRequestDTO(thirdPersonName, thirdPersonCPF, birthDate, "Third person contact", "44 99874-4288", "email@email.com");
         this.createPerson(thirdPerson);
 
         Pageable pageable = PageRequest.of(1, 2);

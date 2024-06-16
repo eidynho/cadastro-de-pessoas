@@ -16,13 +16,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonFoundException;
+import viniciuseidy.cadastro_de_pessoas.modules.person.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
+import viniciuseidy.cadastro_de_pessoas.modules.person.repositories.ContactRepository;
 import viniciuseidy.cadastro_de_pessoas.modules.person.repositories.PersonRepository;
 
 public class CreatePersonUseCaseTest {
 
     @Mock
     private PersonRepository personRepository;
+
+    @Mock
+    private ContactRepository contactRepository;
 
     @Autowired
     @InjectMocks
@@ -39,9 +44,15 @@ public class CreatePersonUseCaseTest {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf("12345678901");
 
-        this.createPersonUseCase.execute(personEntity);
+        ContactEntity contactEntity = new ContactEntity();
+        contactEntity.setName("Contact name");
+        contactEntity.setPhone("44 998744288");
+        contactEntity.setEmail("email@email.com");
+
+        this.createPersonUseCase.execute(personEntity, contactEntity);
 
         verify(this.personRepository).save(personEntity);
+        verify(this.contactRepository).save(contactEntity);
     }
 
     @Test
@@ -50,8 +61,13 @@ public class CreatePersonUseCaseTest {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf("123456");
 
+        ContactEntity contactEntity = new ContactEntity();
+        contactEntity.setName("Contact name");
+        contactEntity.setPhone("44 998744288");
+        contactEntity.setEmail("email@email.com");
+
         assertThrows(IllegalArgumentException.class, () -> {
-            this.createPersonUseCase.execute(personEntity);
+            this.createPersonUseCase.execute(personEntity, contactEntity);
         });
     }
 
@@ -61,10 +77,15 @@ public class CreatePersonUseCaseTest {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf("12345678901");
 
+        ContactEntity contactEntity = new ContactEntity();
+        contactEntity.setName("Contact name");
+        contactEntity.setPhone("44 998744288");
+        contactEntity.setEmail("email@email.com");
+
         when(this.personRepository.findByCpf(personEntity.getCpf())).thenReturn(Optional.of(personEntity));
 
         assertThrows(PersonFoundException.class, () -> {
-            this.createPersonUseCase.execute(personEntity);
+            this.createPersonUseCase.execute(personEntity, contactEntity);
         });
 
         verify(this.personRepository, never()).save(personEntity);

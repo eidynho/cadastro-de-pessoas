@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDTO;
+import viniciuseidy.cadastro_de_pessoas.modules.person.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.CreatePersonUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.person.useCases.DeletePersonUseCase;
@@ -98,7 +99,12 @@ public class PersonController {
         try {
             PersonEntity personEntity = new PersonEntity(data);
 
-            var createdPerson = this.createPersonUseCase.execute(personEntity);
+            ContactEntity contactEntity = new ContactEntity();
+            contactEntity.setName(data.contactName());
+            contactEntity.setPhone(data.contactPhone());
+            contactEntity.setEmail(data.contactEmail());
+
+            var createdPerson = this.createPersonUseCase.execute(personEntity, contactEntity);
             
             return ResponseEntity.ok().body(createdPerson);
         } catch (Exception e) {

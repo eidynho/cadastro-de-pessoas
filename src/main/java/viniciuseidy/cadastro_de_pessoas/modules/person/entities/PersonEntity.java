@@ -1,15 +1,18 @@
 package viniciuseidy.cadastro_de_pessoas.modules.person.entities;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.UpdatePersonRequestDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
@@ -42,6 +45,10 @@ public class PersonEntity {
     @Past(message = "Birth date must be in the past")
     @Column(nullable = false)
     private LocalDate birthDate;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Size(min = 1, message = "Person must have at least one contact")
+    private List<ContactEntity> contacts;
 
     public PersonEntity(CreatePersonRequestDTO data) {
         this.name = data.name();
