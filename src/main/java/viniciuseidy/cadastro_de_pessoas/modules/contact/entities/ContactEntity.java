@@ -2,6 +2,8 @@ package viniciuseidy.cadastro_de_pessoas.modules.contact.entities;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.CreateContactRequestDTO;
-import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.UpdateContactRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 
 @Entity(name = "contact")
@@ -44,9 +46,17 @@ public class ContactEntity {
 
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
+    @JsonBackReference
     private PersonEntity person;
 
     public ContactEntity(CreateContactRequestDTO data) {
+        this.name = data.name();
+        this.phone = data.phone();
+        this.email = data.email();
+    }
+
+    public ContactEntity(UpdateContactRequestDTO data) {
+        this.id = data.contactId();
         this.name = data.name();
         this.phone = data.phone();
         this.email = data.email();
