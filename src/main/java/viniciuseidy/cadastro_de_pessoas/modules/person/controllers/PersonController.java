@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import viniciuseidy.cadastro_de_pessoas.exceptions.PersonFoundException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
@@ -107,6 +108,10 @@ public class PersonController {
             var createdPerson = this.createPersonUseCase.execute(personEntity, contactEntity);
             
             return ResponseEntity.ok().body(createdPerson);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (PersonFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
