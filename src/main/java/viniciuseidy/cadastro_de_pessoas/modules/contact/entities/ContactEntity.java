@@ -16,6 +16,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.CreateContactRequestDTO;
+import viniciuseidy.cadastro_de_pessoas.modules.person.dto.CreatePersonRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
 
 @Entity(name = "contact")
@@ -43,4 +45,10 @@ public class ContactEntity {
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
+
+    public ContactEntity(CreateContactRequestDTO data) {
+        this.name = data.name();
+        this.phone = data.phone();
+        this.email = data.email();
+    }
 }
