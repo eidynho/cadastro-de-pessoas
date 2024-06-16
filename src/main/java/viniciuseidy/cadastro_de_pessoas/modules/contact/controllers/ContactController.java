@@ -1,7 +1,11 @@
 package viniciuseidy.cadastro_de_pessoas.modules.contact.controllers;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +21,7 @@ import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.CreateContactRequest
 import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.UpdateContactRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.useCases.CreateContactUseCase;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.useCases.DeleteContactUseCase;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.useCases.UpdateContactUseCase;
 
 @RestController
@@ -28,6 +33,9 @@ public class ContactController {
 
     @Autowired
     private UpdateContactUseCase updateContactUseCase;
+
+    @Autowired
+    private DeleteContactUseCase deleteContactUseCase;
     
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody CreateContactRequestDTO data) {
@@ -56,6 +64,17 @@ public class ContactController {
             return ResponseEntity.notFound().build();
         } catch (InvalidEmailException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> delete(@PathVariable UUID id) {
+        try {
+            this.deleteContactUseCase.execute(id);
+
+            return ResponseEntity.noContent().build();
+        } catch (ContactNotFoundException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }
