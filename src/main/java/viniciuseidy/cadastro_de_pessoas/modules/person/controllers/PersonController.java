@@ -76,7 +76,7 @@ public class PersonController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Object> getPersons(
         @RequestParam Optional<String> name,
         @RequestParam Optional<String> cpf,
