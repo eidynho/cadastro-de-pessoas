@@ -40,7 +40,7 @@ public class ContactEntity {
     @Column(nullable = false)
     private String phone;
 
-    @Email(message = "Email should be valid")
+    @Email(message = "Formato de e-mail inválido.")
     @Column(nullable = false)
     private String email;
 

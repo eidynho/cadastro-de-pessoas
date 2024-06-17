@@ -42,15 +42,15 @@ public class PersonEntity {
     private String name;
 
     @Column(nullable = false, unique = true)
-    @Pattern(regexp = "\\d{11}", message = "CPF must have exactly 11 digits and contain only digits")
+    @Pattern(regexp = "\\d{11}", message = "O CPF deve possuir 11 caracteres e apenas dígitos.")
     private String cpf;
 
-    @Past(message = "Birth date must be in the past")
+    @Past(message = "A data de aniversário deve estar no passado.")
     @Column(nullable = false)
     private LocalDate birthDate;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Size(min = 1, message = "Person must have at least one contact")
+    @Size(min = 1, message = "A pessoa deve possuir ao menos um contato.")
     @JsonManagedReference
     private List<ContactEntity> contacts;
 

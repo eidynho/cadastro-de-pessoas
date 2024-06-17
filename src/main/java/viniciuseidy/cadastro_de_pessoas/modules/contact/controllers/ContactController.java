@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import viniciuseidy.cadastro_de_pessoas.exceptions.ContactNotFoundException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.InvalidEmailException;
+import viniciuseidy.cadastro_de_pessoas.exceptions.OneContactPerPersonIsRequiredException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.CreateContactRequestDTO;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.dto.UpdateContactRequestDTO;
@@ -74,6 +75,8 @@ public class ContactController {
             return ResponseEntity.noContent().build();
         } catch (ContactNotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (OneContactPerPersonIsRequiredException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

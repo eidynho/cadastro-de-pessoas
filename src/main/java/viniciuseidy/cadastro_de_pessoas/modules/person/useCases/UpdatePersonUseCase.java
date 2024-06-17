@@ -29,7 +29,7 @@ public class UpdatePersonUseCase {
         boolean isSameCPF = updatedPerson.getCpf().equals(existingPersonEntity.getCpf());
         if (updatedPerson.getCpf() != null && !isSameCPF) {
             if (!updatedPerson.getCpf().matches("\\d{11}")) {
-                throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
+                throw new IllegalArgumentException("O CPF deve possuir 11 caracteres e apenas dígitos.");
             }
 
             Optional<PersonEntity> personWithCPF = this.personRepository.findByCpf(updatedPerson.getCpf());
