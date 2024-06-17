@@ -25,6 +25,8 @@ public class DeleteContactUseCase {
             throw new OneContactPerPersonIsRequiredException();
         }
 
+        existentContact.getPerson().getContacts().remove(existentContact);
+
         this.contactRepository.deleteById(contactId);
     }
 }
