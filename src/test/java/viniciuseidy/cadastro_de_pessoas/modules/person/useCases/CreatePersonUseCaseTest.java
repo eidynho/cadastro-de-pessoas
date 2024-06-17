@@ -1,5 +1,6 @@
 package viniciuseidy.cadastro_de_pessoas.modules.person.useCases;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import viniciuseidy.cadastro_de_pessoas.exceptions.BirthDateMustBeInPastException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.CPFAlreadyExistsException;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.repositories.ContactRepository;
@@ -40,7 +42,7 @@ public class CreatePersonUseCaseTest {
 
     @Test
     @DisplayName("Should create a person successfully when everything is ok")
-    void createPersonUseCaseSuccess() throws CPFAlreadyExistsException {
+    void createPersonUseCaseSuccess() throws CPFAlreadyExistsException, BirthDateMustBeInPastException {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf("12345678901");
 
@@ -94,5 +96,22 @@ public class CreatePersonUseCaseTest {
         });
 
         verify(this.personRepository, never()).save(personEntity);
+    }
+
+    @Test
+    @DisplayName("Should throw BirthDateMustBeInPastException when birth date isn't in past")
+    void createPersonUseCaseErrorCase3() {
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setCpf("12345678900");
+        personEntity.setBirthDate(LocalDate.of(2099, 1, 1));
+
+        ContactEntity contactEntity = new ContactEntity();
+        contactEntity.setName("Contact name");
+        contactEntity.setPhone("44 998744288");
+        contactEntity.setEmail("email@email.com");
+
+        assertThrows(BirthDateMustBeInPastException.class, () -> {
+            this.createPersonUseCase.execute(personEntity, contactEntity);
+        });
     }
 }

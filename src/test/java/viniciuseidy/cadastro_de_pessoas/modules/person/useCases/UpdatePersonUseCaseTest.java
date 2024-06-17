@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import viniciuseidy.cadastro_de_pessoas.exceptions.BirthDateMustBeInPastException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.CPFAlreadyExistsException;
 import viniciuseidy.cadastro_de_pessoas.exceptions.PersonNotFoundException;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
@@ -39,7 +40,7 @@ public class UpdatePersonUseCaseTest {
 
     @Test
     @DisplayName("Should update a person when everything is ok")
-    void updatePersonUseCaseSuccess() throws PersonNotFoundException, CPFAlreadyExistsException {
+    void updatePersonUseCaseSuccess() throws PersonNotFoundException, CPFAlreadyExistsException, BirthDateMustBeInPastException {
         UUID id = UUID.randomUUID();
         String newCpf = "98765432100";
 
@@ -123,6 +124,27 @@ public class UpdatePersonUseCaseTest {
 
         assertThrows(CPFAlreadyExistsException.class, () -> {
             this.updatePersonUseCase.execute(updatedPersonEntity);
+        });
+    }
+
+    @Test
+    @DisplayName("Should throw BirthDateMustBeInPastException when birth date isn't in past")
+    void updatePersonUseCaseError4() {
+        UUID id = UUID.randomUUID();
+
+        PersonEntity personEntity = new PersonEntity();
+        personEntity.setId(id);
+        personEntity.setCpf("12345678900");
+
+        PersonEntity personEntityToUpdate = new PersonEntity();
+        personEntityToUpdate.setId(id);
+        personEntityToUpdate.setCpf("12345678900");
+        personEntityToUpdate.setBirthDate(LocalDate.of(2099, 1, 1));
+
+        when(this.personRepository.findById(id)).thenReturn(Optional.of(personEntity));
+
+        assertThrows(BirthDateMustBeInPastException.class, () -> {
+            this.updatePersonUseCase.execute(personEntityToUpdate);
         });
     }
 }
