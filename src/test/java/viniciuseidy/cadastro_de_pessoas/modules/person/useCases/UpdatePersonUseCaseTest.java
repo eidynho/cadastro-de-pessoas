@@ -39,7 +39,7 @@ public class UpdatePersonUseCaseTest {
 
     @Test
     @DisplayName("Should update a person when everything is ok")
-    void updatePersonUseCaseSuccess() {
+    void updatePersonUseCaseSuccess() throws PersonNotFoundException, CPFAlreadyExistsException {
         UUID id = UUID.randomUUID();
         String newCpf = "98765432100";
 

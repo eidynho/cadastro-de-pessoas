@@ -15,7 +15,7 @@ public class GetPersonByIdUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity execute(UUID id) {
+    public PersonEntity execute(UUID id) throws PersonNotFoundException {
          return this.personRepository.findById(id)
             .orElseThrow(() -> new PersonNotFoundException());
     }

@@ -1,8 +1,6 @@
 package viniciuseidy.cadastro_de_pessoas.modules.contact.useCases;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +42,7 @@ public class CreateContactUseCaseTest {
 
     @Test
     @DisplayName("Should create a contact when everything is ok")
-    void createContactUseCaseSuccess() {
+    void createContactUseCaseSuccess() throws PersonNotFoundException, InvalidEmailException {
         UUID id = UUID.randomUUID();
 
         PersonEntity person = new PersonEntity();

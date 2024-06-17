@@ -36,7 +36,7 @@ public class DeletePersonUseCaseTest {
     
     @Test
     @DisplayName("Should delete when everything is ok")
-    void deletePersonUseCaseSuccess() {
+    void deletePersonUseCaseSuccess() throws PersonNotFoundException {
         UUID personId = UUID.randomUUID();
 
         PersonEntity personEntity = new PersonEntity();

@@ -22,7 +22,7 @@ public class CreateContactUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public ContactEntity execute(UUID personId, ContactEntity contact) {
+    public ContactEntity execute(UUID personId, ContactEntity contact) throws PersonNotFoundException, InvalidEmailException {
         PersonEntity person = this.personRepository.findById(personId)
             .orElseThrow(() -> new PersonNotFoundException());
 

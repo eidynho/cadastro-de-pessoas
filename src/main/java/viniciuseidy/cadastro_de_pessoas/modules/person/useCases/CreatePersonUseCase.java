@@ -1,10 +1,12 @@
 package viniciuseidy.cadastro_de_pessoas.modules.person.useCases;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
-import viniciuseidy.cadastro_de_pessoas.exceptions.PersonFoundException;
+import viniciuseidy.cadastro_de_pessoas.exceptions.CPFAlreadyExistsException;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.repositories.ContactRepository;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
@@ -20,16 +22,15 @@ public class CreatePersonUseCase {
     private ContactRepository contactRepository;
 
     @Transactional
-    public PersonEntity execute(PersonEntity person, ContactEntity contact) {
+    public PersonEntity execute(PersonEntity person, ContactEntity contact) throws IllegalArgumentException, CPFAlreadyExistsException {
         if (!person.getCpf().matches("\\d{11}")) {
             throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
         }
         
-        this.personRepository
-            .findByCpf(person.getCpf())
-            .ifPresent((personEntity) -> {
-                throw new PersonFoundException();
-            });
+        Optional<PersonEntity> personWithCPF = this.personRepository.findByCpf(person.getCpf());
+        if (personWithCPF.isPresent()) {
+            throw new CPFAlreadyExistsException();
+        }
       
         PersonEntity createdPerson = this.personRepository.save(person);
 

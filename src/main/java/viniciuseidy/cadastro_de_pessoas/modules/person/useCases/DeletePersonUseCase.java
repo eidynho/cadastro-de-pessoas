@@ -14,7 +14,7 @@ public class DeletePersonUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public void execute(UUID id) {
+    public void execute(UUID id) throws PersonNotFoundException {
         this.personRepository
             .findById(id)
             .orElseThrow(() -> new PersonNotFoundException());

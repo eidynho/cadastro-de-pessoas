@@ -14,11 +14,9 @@ public class DeleteContactUseCase {
     @Autowired
     private ContactRepository contactRepository;
 
-    public void execute(UUID contactId) {
+    public void execute(UUID contactId) throws ContactNotFoundException {
         this.contactRepository.findById(contactId)
-            .orElseThrow(() -> {
-                throw new ContactNotFoundException();
-            });
+            .orElseThrow(() -> new ContactNotFoundException());
 
         this.contactRepository.deleteById(contactId);
     }

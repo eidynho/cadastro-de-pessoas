@@ -1,5 +1,7 @@
 package viniciuseidy.cadastro_de_pessoas.modules.person.useCases;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ public class UpdatePersonUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity execute(PersonEntity updatedPerson) {  
+    public PersonEntity execute(PersonEntity updatedPerson) throws PersonNotFoundException, CPFAlreadyExistsException {  
         PersonEntity existingPersonEntity = this.personRepository
             .findById(updatedPerson.getId())
             .orElseThrow(() -> new PersonNotFoundException());
@@ -29,11 +31,10 @@ public class UpdatePersonUseCase {
                 throw new IllegalArgumentException("CPF must have exactly 11 digits and contain only digits");
             }
 
-            this.personRepository
-                .findByCpf(updatedPerson.getCpf())
-                .ifPresent((person) -> {
-                    throw new CPFAlreadyExistsException();
-                });
+            Optional<PersonEntity> personWithCPF = this.personRepository.findByCpf(updatedPerson.getCpf());
+            if (personWithCPF.isPresent()) {
+                throw new CPFAlreadyExistsException();
+            }
 
             existingPersonEntity.setCpf(updatedPerson.getCpf());
         }

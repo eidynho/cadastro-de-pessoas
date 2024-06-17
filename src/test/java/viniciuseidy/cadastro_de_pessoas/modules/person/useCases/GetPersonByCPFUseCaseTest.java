@@ -36,7 +36,7 @@ public class GetPersonByCPFUseCaseTest {
 
     @Test
     @DisplayName("Should get a person by cpf when everything is ok")
-    void getPersonByCPFUseCaseSuccess() {
+    void getPersonByCPFUseCaseSuccess() throws PersonNotFoundException {
         String cpf = "12345678900";
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf(cpf);

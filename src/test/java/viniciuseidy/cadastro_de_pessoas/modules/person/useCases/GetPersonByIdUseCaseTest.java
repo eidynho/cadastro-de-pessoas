@@ -37,7 +37,7 @@ public class GetPersonByIdUseCaseTest {
 
     @Test
     @DisplayName("Should get a person by id when everything is ok")
-    void getPersonByIdUseCaseSuccess() {
+    void getPersonByIdUseCaseSuccess() throws PersonNotFoundException {
         UUID id = UUID.randomUUID();
 
         PersonEntity personEntity = new PersonEntity();

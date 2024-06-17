@@ -13,7 +13,7 @@ public class GetPersonByCPFUseCase {
     @Autowired
     private PersonRepository personRepository;
 
-    public PersonEntity execute(String cpf) {
+    public PersonEntity execute(String cpf) throws PersonNotFoundException {
          return this.personRepository.findByCpf(cpf)
             .orElseThrow(() -> new PersonNotFoundException());
     }

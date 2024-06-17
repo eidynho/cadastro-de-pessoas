@@ -38,7 +38,7 @@ public class UpdateContactUseCaseTest {
 
     @Test
     @DisplayName("Should update contact when everything is ok")
-    void updateContactUseCaseSuccess() {
+    void updateContactUseCaseSuccess() throws ContactNotFoundException, InvalidEmailException {
         UUID id = UUID.randomUUID();
 
         ContactEntity existentContact = new ContactEntity();

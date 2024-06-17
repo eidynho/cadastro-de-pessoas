@@ -15,7 +15,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import viniciuseidy.cadastro_de_pessoas.exceptions.PersonFoundException;
+import viniciuseidy.cadastro_de_pessoas.exceptions.CPFAlreadyExistsException;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.repositories.ContactRepository;
 import viniciuseidy.cadastro_de_pessoas.modules.person.entities.PersonEntity;
@@ -40,7 +40,7 @@ public class CreatePersonUseCaseTest {
 
     @Test
     @DisplayName("Should create a person successfully when everything is ok")
-    void createPersonUseCaseSuccess() {
+    void createPersonUseCaseSuccess() throws CPFAlreadyExistsException {
         PersonEntity personEntity = new PersonEntity();
         personEntity.setCpf("12345678901");
 
@@ -72,19 +72,24 @@ public class CreatePersonUseCaseTest {
     }
 
     @Test
-    @DisplayName("Should throw an exception when person with CPF already exists")
+    @DisplayName("Should throw CPFAlreadyExistsException when person with CPF already exists")
     void createPersonUseCaseErrorCase2() {
+        String cpfToBeTested = "12345678901";
+
+        PersonEntity randomPersonEntity = new PersonEntity();
+        randomPersonEntity.setCpf(cpfToBeTested);
+
         PersonEntity personEntity = new PersonEntity();
-        personEntity.setCpf("12345678901");
+        personEntity.setCpf(cpfToBeTested);
 
         ContactEntity contactEntity = new ContactEntity();
         contactEntity.setName("Contact name");
         contactEntity.setPhone("44 998744288");
         contactEntity.setEmail("email@email.com");
 
-        when(this.personRepository.findByCpf(personEntity.getCpf())).thenReturn(Optional.of(personEntity));
+        when(this.personRepository.findByCpf(cpfToBeTested)).thenReturn(Optional.of(randomPersonEntity));
 
-        assertThrows(PersonFoundException.class, () -> {
+        assertThrows(CPFAlreadyExistsException.class, () -> {
             this.createPersonUseCase.execute(personEntity, contactEntity);
         });
 

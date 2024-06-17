@@ -1,6 +1,5 @@
 package viniciuseidy.cadastro_de_pessoas.modules.contact.useCases;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -37,7 +36,7 @@ public class DeleteContactUseCaseTest {
 
     @Test
     @DisplayName("Should delete a contact when everything is ok")
-    public void deleteContactUseCaseSuccess() {
+    public void deleteContactUseCaseSuccess() throws ContactNotFoundException {
         UUID contactId = UUID.randomUUID();
 
         ContactEntity contactToDelete = new ContactEntity();

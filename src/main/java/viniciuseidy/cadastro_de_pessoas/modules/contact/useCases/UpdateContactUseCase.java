@@ -15,12 +15,10 @@ public class UpdateContactUseCase {
     @Autowired
     private ContactRepository contactRepository;
 
-    public ContactEntity execute(ContactEntity contact) {
+    public ContactEntity execute(ContactEntity contact) throws ContactNotFoundException, InvalidEmailException {
         ContactEntity existentContact = this.contactRepository
             .findById(contact.getId())
-            .orElseThrow(() -> {
-                throw new ContactNotFoundException();
-            });
+            .orElseThrow(() -> new ContactNotFoundException());
 
         contact.setPerson(existentContact.getPerson());
 
