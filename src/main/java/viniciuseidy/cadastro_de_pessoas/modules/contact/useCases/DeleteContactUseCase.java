@@ -6,17 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import viniciuseidy.cadastro_de_pessoas.exceptions.ContactNotFoundException;
+import viniciuseidy.cadastro_de_pessoas.exceptions.OneContactPerPersonIsRequiredException;
+import viniciuseidy.cadastro_de_pessoas.modules.contact.entities.ContactEntity;
 import viniciuseidy.cadastro_de_pessoas.modules.contact.repositories.ContactRepository;
 
 @Service
 public class DeleteContactUseCase {
-    
+
     @Autowired
     private ContactRepository contactRepository;
 
-    public void execute(UUID contactId) throws ContactNotFoundException {
-        this.contactRepository.findById(contactId)
+    public void execute(UUID contactId) throws ContactNotFoundException, OneContactPerPersonIsRequiredException {
+        ContactEntity existentContact = this.contactRepository.findById(contactId)
             .orElseThrow(() -> new ContactNotFoundException());
+
+        int contactsSize = existentContact.getPerson().getContacts().size();
+        if (contactsSize == 1) {
+            throw new OneContactPerPersonIsRequiredException();
+        }
 
         this.contactRepository.deleteById(contactId);
     }
